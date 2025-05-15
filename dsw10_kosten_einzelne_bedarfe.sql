@@ -1,21 +1,22 @@
 DECLARE
-    v_start_ziffer NUMBER := 89; -- Startwert (erste Endziffer)
-    v_end_ziffer   NUMBER := 98; -- Endwert (letzte Endziffer)
-    v_sql          VARCHAR2(4000);
+    i NUMBER := 1; -- Startindex für die Schleife
+    max_num NUMBER := 43; -- Maximale Anzahl von KOSTEN_BEDARF-Spalten (KOSTEN_BEDARF_01 bis KOSTEN_BEDARF_25)
+    sql_stmt VARCHAR2(4000); -- Dynamisches SQL-Statement
 BEGIN
-    v_sql := 'UPDATE TEMP_TABLE_ALLE_KT_DSW SET ';
+    -- Dynamisches Update für jede Nummer
+    sql_stmt := 'UPDATE TEMP_TABLE_ALLE_KT_DSW_MOD6 SET ';
     
-    FOR i IN v_start_ziffer..v_end_ziffer LOOP
-        -- Dynamisch die Berechnung jeder Spalte hinzufügen
-        v_sql := v_sql || 'KOSTEN_BEDARF_' || i || ' = NVL(ABZGL_LAGER_' || i || ', 0) * NVL(EINZELPREIS_BRUTTO, 0)';
-        
-        -- Komma hinzufügen, außer bei der letzten Iteration
-        IF i < v_end_ziffer THEN
-            v_sql := v_sql || ', ';
+    FOR i IN 1..max_num LOOP
+        -- Ergänze das dynamische SQL-Statement für jede Spalte
+        IF i > 1 THEN
+            sql_stmt := sql_stmt || ', ';
         END IF;
+
+        sql_stmt := sql_stmt || 'KOSTEN_BEDARF_' || LPAD(i, 2, '0') || 
+                    ' = NVL(ABZGL_LAGER_' || LPAD(i, 2, '0') || ', 0) * NVL(EINZELPREIS_BRUTTO, 0)';
     END LOOP;
 
-    -- Dynamisches SQL ausführen
-    EXECUTE IMMEDIATE v_sql;
+    -- Führe das dynamische SQL-Statement aus
+    EXECUTE IMMEDIATE sql_stmt;
 END;
 /
