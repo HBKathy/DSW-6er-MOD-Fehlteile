@@ -1,11 +1,11 @@
 DECLARE
-    v_start_ziffer NUMBER := 89; -- Startziffer
-    v_end_ziffer   NUMBER := 90; -- Endziffer
+    v_start_ziffer NUMBER := 1; -- Startziffer
+    v_end_ziffer   NUMBER := 43; -- Endziffer
     v_sql          VARCHAR2(4000);
 BEGIN
     FOR i IN v_start_ziffer..v_end_ziffer LOOP
         v_sql := '
-            MERGE INTO temp_table_ALLE_KT_DSW t
+            MERGE INTO temp_table_ALLE_KT_DSW_mod6 t
             USING
             (
                 SELECT
@@ -17,9 +17,10 @@ BEGIN
                     SELECT prodauftr
                     FROM wrkord
                     CONNECT BY PRIOR prodauftr = linkauf
-                    START WITH prodauftr = ''KA20181206' || TO_CHAR(i) || '''
+                    START WITH prodauftr = ''KA20181206'' || TO_CHAR(' || i || ', ''FM00'')
                 )
                 AND a.kzfertig != 4800
+                and a.kzfertig > 600
                 GROUP BY a.teilenr
             ) src
             ON (t.teilenr = src.teilenr)
