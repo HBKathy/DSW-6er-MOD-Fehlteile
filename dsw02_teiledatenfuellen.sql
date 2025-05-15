@@ -1,4 +1,4 @@
-INSERT INTO temp_table_alle_kt_dsw (
+INSERT INTO temp_table_alle_kt_dsw_mod6 (
     teilenr,
     bez,
     bez2,
@@ -46,7 +46,7 @@ AND (
     (p.kzkauf = 'K' AND p.dispo_aktiv_jn != 'N') 
     OR (p.kzkauf = 'E' AND p.VERLAGERUNGS_ART IN ('VO', 'VM', 'KB'))
 )
-AND p.dispo_gruppe NOT IN ('183', '185')
+AND p.dispo_gruppe NOT IN ('183', '185', '91')
 GROUP BY
     a.teilenr,
     p.bez,
