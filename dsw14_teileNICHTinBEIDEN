@@ -1,0 +1,14 @@
+SELECT temp_table_alle_kt_dsw.*
+FROM temp_table_alle_kt_dsw
+LEFT JOIN temp_table_alle_kt_dsw_techa
+ON temp_table_alle_kt_dsw.teilenr = temp_table_alle_kt_dsw_techa.teilenr
+WHERE temp_table_alle_kt_dsw_techa.teilenr IS NULL
+
+UNION
+
+-- Zeilen aus Tabelle2, deren teilenr nicht in Tabelle1 vorkommt
+SELECT temp_table_alle_kt_dsw_techa.*
+FROM temp_table_alle_kt_dsw_techa
+LEFT JOIN temp_table_alle_kt_dsw
+ON temp_table_alle_kt_dsw_techa.teilenr = temp_table_alle_kt_dsw.teilenr
+WHERE temp_table_alle_kt_dsw.teilenr IS NULL;

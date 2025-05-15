@@ -1,0 +1,45 @@
+DECLARE
+    v_sql VARCHAR2(4000);
+    i     NUMBER;
+    prefix VARCHAR2(4);
+BEGIN
+    FOR i IN 89..98 LOOP
+        -- Bestimme den Präfix (6 für 89 und 90, 8 für 91 bis 98)
+        IF i <= 90 THEN
+            prefix := '1206';
+        ELSE
+            prefix := '1208';
+        END IF;
+
+        -- Dynamische SQL-Anweisung für die allererste Iteration (89)
+        IF i = 89 THEN
+            v_sql := 'UPDATE temp_table_alle_kt_dsw ' ||
+                     'SET REST_LAGER_' || i || ' = CASE ' ||
+                     'WHEN NVL(LAGERBESTAND, 0) > NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
+                     'THEN NVL(LAGERBESTAND, 0) - NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
+                     'ELSE NULL ' ||
+                     'END, ' ||
+                     'ABZGL_LAGER_' || i || ' = CASE ' ||
+                     'WHEN NVL(LAGERBESTAND, 0) < NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
+                     'THEN NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) - NVL(LAGERBESTAND, 0) ' ||
+                     'ELSE NULL ' ||
+                     'END';
+        ELSE
+            -- Dynamische SQL-Anweisung für alle weiteren Iterationen (90 bis 98)
+            v_sql := 'UPDATE temp_table_alle_kt_dsw ' ||
+                     'SET REST_LAGER_' || i || ' = CASE ' ||
+                     'WHEN NVL(REST_LAGER_' || (i - 1) || ', 0) > NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
+                     'THEN NVL(REST_LAGER_' || (i - 1) || ', 0) - NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
+                     'ELSE NULL ' ||
+                     'END, ' ||
+                     'ABZGL_LAGER_' || i || ' = CASE ' ||
+                     'WHEN NVL(REST_LAGER_' || (i - 1) || ', 0) < NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
+                     'THEN NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) - NVL(REST_LAGER_' || (i - 1) || ', 0) ' ||
+                     'ELSE NULL ' ||
+                     'END';
+        END IF;
+
+        -- Ausführen der dynamischen SQL-Anweisung
+        EXECUTE IMMEDIATE v_sql;
+    END LOOP;
+END;

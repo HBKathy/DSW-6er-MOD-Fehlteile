@@ -1,0 +1,31 @@
+DECLARE
+    v_sql_query VARCHAR2(4000);
+BEGIN
+    FOR i IN 91..98 LOOP
+        -- Dynamische SQL-Abfrage erstellen
+        v_sql_query := '
+            MERGE INTO temp_table_alle_kt_dsw t
+            USING (
+                SELECT
+                    teilenr,
+                    LISTAGG(liefertermin, '','') WITHIN GROUP (ORDER BY liefertermin) AS liefertermine
+                FROM (
+                    SELECT DISTINCT
+                        b.teilenr,
+                        b.liefertermin
+                    FROM bes_pos b
+                    WHERE b.prodauftr LIKE ''KA20231208'||TO_CHAR(i)||'%'' 
+                      AND b.status IN (2700, 2710)
+                      AND b.a_art IN (''BE'', ''RA'')
+                )
+                GROUP BY teilenr
+            ) s
+            ON (t.teilenr = s.teilenr)
+            WHEN MATCHED THEN
+                UPDATE SET t.AGG_Liefertermin_' || TO_CHAR(i) || ' = s.liefertermine';
+
+        -- Dynamische SQL-Abfrage ausführen
+        EXECUTE IMMEDIATE v_sql_query;
+    END LOOP;
+END;
+/
