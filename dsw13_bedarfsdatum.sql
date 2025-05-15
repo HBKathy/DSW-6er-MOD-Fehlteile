@@ -13,7 +13,7 @@ BEGIN
                     TO_CHAR(MIN(a.enddat), ''dd.mm.yyyy'') AS bedarfstermin -- Jüngstes Datum ermitteln und formatieren
                 FROM allocs a
                 JOIN parts p ON p.teilenr = a.teilenr
-                WHERE b.prodauftr LIKE ''KA20181206'' || TO_CHAR(' || i || ', ''FM00'')
+                WHERE a.prodauftr LIKE ''KA20181206'' || TO_CHAR(' || i || ', ''FM00'')
                 AND a.kzfertig != 4800
                 GROUP BY a.teilenr
             ) src
