@@ -1,16 +1,11 @@
-MERGE INTO temp_table_alle_kt_dsw t 
+MERGE INTO temp_table_alle_kt_mod6 t 
 USING  
 ( 
    SELECT  
         a.teilenr,  
         SUM(a.resmenge) AS summe_auftrmenge 
 FROM allocs a 
- WHERE a.prodauftr IN (  
-        SELECT prodauftr  
-        FROM wrkord  
-        CONNECT BY PRIOR prodauftr = linkauf  
-        START WITH prodauftr = 'KA2018120689' 
-    ) 
+WHERE a.prodauftr LIKE 'KA2018120603%'
    GROUP BY a.teilenr 
 ) src 
 ON (t.teilenr = src.teilenr) 
