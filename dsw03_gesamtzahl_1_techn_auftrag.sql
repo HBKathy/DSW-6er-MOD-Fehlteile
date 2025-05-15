@@ -1,4 +1,4 @@
-MERGE INTO temp_table_alle_kt_mod6 t 
+MERGE INTO temp_table_alle_kt_dsw_mod6 t 
 USING  
 ( 
    SELECT  
