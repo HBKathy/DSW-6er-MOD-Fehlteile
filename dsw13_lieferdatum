@@ -1,0 +1,32 @@
+DECLARE
+    v_start_ziffer NUMBER := 1; -- Startziffer
+    v_end_ziffer   NUMBER := 43; -- Endziffer
+    v_sql          VARCHAR2(4000);
+BEGIN
+    FOR i IN v_start_ziffer..v_end_ziffer LOOP
+        v_sql := '
+            MERGE INTO temp_table_ALLE_KT_DSW_MOD6 t
+            USING
+            (
+                SELECT
+                    teilenr,
+                    TO_CHAR(MIN(liefertermin), ''dd.mm.yyyy'') AS liefertermin -- Jüngstes Datum ermitteln und formatieren
+                FROM (
+                  SELECT DISTINCT
+                    b.teilenr,
+                    b.liefertermin
+                  FROM bes_pos b
+                  WHERE b.prodauftr LIKE ''KA20181206'' || TO_CHAR(' || i || ', ''FM00'')
+                  AND b.status IN (2700, 2710)
+                  AND b.a_art IN (''BE'', ''RA'')
+                )
+                GROUP BY teilenr
+            ) src
+            ON (t.teilenr = src.teilenr)
+            WHEN MATCHED THEN
+                UPDATE SET t.Liefertermin_' || TO_CHAR(i, 'FM00') || ' = src.liefertermin'; -- Jüngstes Datum schreiben
+        
+        EXECUTE IMMEDIATE v_sql;
+    END LOOP;
+END;
+/
