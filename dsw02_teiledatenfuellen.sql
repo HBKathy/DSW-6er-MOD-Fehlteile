@@ -41,15 +41,7 @@ SELECT
 FROM allocs a
 JOIN parts p ON p.teilenr = a.teilenr
 LEFT JOIN FinalPreis fp ON a.teilenr = fp.teilenr
-WHERE a.prodauftr IN (
-    SELECT prodauftr
-    FROM (
-        SELECT prodauftr
-        FROM wrkord
-        CONNECT BY PRIOR prodauftr = linkauf
-        START WITH prodauftr = 'KA2018120689'
-    )
-)
+WHERE a.prodauftr LIKE 'KA2018120603%'
 AND (
     (p.kzkauf = 'K' AND p.dispo_aktiv_jn != 'N') 
     OR (p.kzkauf = 'E' AND p.VERLAGERUNGS_ART IN ('VO', 'VM', 'KB'))
