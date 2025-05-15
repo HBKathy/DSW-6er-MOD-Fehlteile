@@ -1,45 +1,23 @@
 DECLARE
-    v_sql VARCHAR2(4000);
-    i     NUMBER;
-    prefix VARCHAR2(4);
+    i NUMBER := 1; -- Startindex für die Schleife
+    max_num NUMBER := 43; -- Maximale Anzahl von LAGER- und BEDARF-Spalten (REST_LAGER_01 bis REST_LAGER_03, BEDARF_121101 bis BEDARF_121103)
+    sql_stmt VARCHAR2(4000); -- Dynamisches SQL-Statement
 BEGIN
-    FOR i IN 89..98 LOOP
-        -- Bestimme den Präfix (6 für 89 und 90, 8 für 91 bis 98)
-        IF i <= 90 THEN
-            prefix := '1206';
-        ELSE
-            prefix := '1208';
-        END IF;
-
-        -- Dynamische SQL-Anweisung für die allererste Iteration (89)
-        IF i = 89 THEN
-            v_sql := 'UPDATE temp_table_alle_kt_dsw ' ||
-                     'SET REST_LAGER_' || i || ' = CASE ' ||
-                     'WHEN NVL(LAGERBESTAND, 0) > NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
-                     'THEN NVL(LAGERBESTAND, 0) - NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
-                     'ELSE NULL ' ||
-                     'END, ' ||
-                     'ABZGL_LAGER_' || i || ' = CASE ' ||
-                     'WHEN NVL(LAGERBESTAND, 0) < NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
-                     'THEN NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) - NVL(LAGERBESTAND, 0) ' ||
-                     'ELSE NULL ' ||
-                     'END';
-        ELSE
-            -- Dynamische SQL-Anweisung für alle weiteren Iterationen (90 bis 98)
-            v_sql := 'UPDATE temp_table_alle_kt_dsw ' ||
-                     'SET REST_LAGER_' || i || ' = CASE ' ||
-                     'WHEN NVL(REST_LAGER_' || (i - 1) || ', 0) > NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
-                     'THEN NVL(REST_LAGER_' || (i - 1) || ', 0) - NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
-                     'ELSE NULL ' ||
-                     'END, ' ||
-                     'ABZGL_LAGER_' || i || ' = CASE ' ||
-                     'WHEN NVL(REST_LAGER_' || (i - 1) || ', 0) < NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) ' ||
-                     'THEN NVL(BEDARF_' || prefix || TO_CHAR(i) || ', 0) - NVL(REST_LAGER_' || (i - 1) || ', 0) ' ||
-                     'ELSE NULL ' ||
-                     'END';
-        END IF;
-
-        -- Ausführen der dynamischen SQL-Anweisung
-        EXECUTE IMMEDIATE v_sql;
+    -- Dynamisches Update für jede Nummer
+    FOR i IN 1..max_num LOOP
+        -- Generiere das dynamische SQL-Statement
+        sql_stmt := 'UPDATE TEMP_TABLE_ALLE_KT_DSW_MOD6 SET ' ||
+                    'REST_LAGER_' || LPAD(i, 2, '0') || ' = CASE ' ||
+                    'WHEN NVL(' || CASE WHEN i = 1 THEN 'LAGERBESTAND' ELSE 'REST_LAGER_' || LPAD(i-1, 2, '0') END || ', 0) > NVL(BEDARF_1206' || LPAD(i, 2, '0') || ', 0) ' ||
+                    'THEN NVL(' || CASE WHEN i = 1 THEN 'LAGERBESTAND' ELSE 'REST_LAGER_' || LPAD(i-1, 2, '0') END || ', 0) - NVL(BEDARF_1206' || LPAD(i, 2, '0') || ', 0) ' ||
+                    'ELSE NULL END, ' ||
+                    'ABZGL_LAGER_' || LPAD(i, 2, '0') || ' = CASE ' ||
+                    'WHEN NVL(' || CASE WHEN i = 1 THEN 'LAGERBESTAND' ELSE 'REST_LAGER_' || LPAD(i-1, 2, '0') END || ', 0) < NVL(BEDARF_1206' || LPAD(i, 2, '0') || ', 0) ' ||
+                    'THEN NVL(BEDARF_1206' || LPAD(i, 2, '0') || ', 0) - NVL(' || CASE WHEN i = 1 THEN 'LAGERBESTAND' ELSE 'REST_LAGER_' || LPAD(i-1, 2, '0') END || ', 0) ' ||
+                    'ELSE NULL END';
+        
+        -- Führe das dynamische SQL-Statement aus
+        EXECUTE IMMEDIATE sql_stmt;
     END LOOP;
 END;
+/
