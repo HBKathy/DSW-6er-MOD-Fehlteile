@@ -17,12 +17,7 @@ BEGIN
                         TO_DATE(a.enddat) AS bedarfstermin
                     FROM allocs a
                     JOIN parts p ON p.teilenr = a.teilenr
-                    WHERE a.prodauftr IN (
-                    SELECT prodauftr
-                    FROM wrkord
-                    CONNECT BY PRIOR prodauftr = linkauf
-                  START WITH prodauftr = ''KA20181206'' || TO_CHAR(' || i || ', ''FM00'')
-                )
+                    WHERE b.prodauftr LIKE ''KA20181206'' || TO_CHAR(' || i || ', ''FM00'')
                 AND a.kzfertig != 4800
   )              
   GROUP BY teilenr
