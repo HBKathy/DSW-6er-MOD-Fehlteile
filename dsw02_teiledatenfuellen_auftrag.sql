@@ -1,4 +1,4 @@
-INSERT INTO TEMP_TABLE_ALLE_KT_LPZ_techa ( 
+INSERT INTO temp_table_alle_kt_dsw_mod6_techa ( 
    teilenr, 
    bez, 
    bez2, 
@@ -41,17 +41,10 @@ SELECT
 FROM allocs a   
 JOIN parts p ON p.teilenr = a.teilenr   
 LEFT JOIN FinalPreis fp ON a.teilenr = fp.teilenr   
-WHERE a.prodauftr IN (    
-    SELECT prodauftr    
-    FROM (   
-        SELECT prodauftr    
-        FROM wrkord    
-        CONNECT BY PRIOR prodauftr = linkauf    
-        START WITH prodauftr = 'KA2022121101'    
-    )   
+WHERE a.prodauftr LIKE 'KA2018120644%'
 )   
 AND ((p.kzkauf = 'K' AND p.dispo_aktiv_jn != 'N') OR (a.kzkauf = 'E' AND a.kz_verlagert IN ('VO', 'VM', 'KB')))  
-AND p.dispo_gruppe NOT IN ('183', '185')   
+AND p.dispo_gruppe NOT IN ('183', '185', '91')   
 GROUP BY     
     a.teilenr,    
     p.bez,    
