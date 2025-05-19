@@ -1,4 +1,4 @@
-INSERT INTO temp_table_alle_kt_dsw_mod6_techa ( 
+INSERT INTO temp_table_dsw_mod6_techa ( 
    teilenr, 
    bez, 
    bez2, 
