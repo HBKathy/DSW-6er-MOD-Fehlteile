@@ -6,7 +6,7 @@ BEGIN
     -- Dynamisches Update für jede Nummer
     FOR i IN 1..max_num LOOP
         -- Generiere das dynamische SQL-Statement
-        sql_stmt := 'UPDATE TEMP_TABLE_ALLE_KT_DSW_MOD6 SET ' ||
+        sql_stmt := 'UPDATE TEMP_TABLE_DSW_MOD6 SET ' ||
                     'REST_LAGER_' || LPAD(i, 2, '0') || ' = CASE ' ||
                     'WHEN NVL(' || CASE WHEN i = 1 THEN 'LAGERBESTAND' ELSE 'REST_LAGER_' || LPAD(i-1, 2, '0') END || ', 0) > NVL(BEDARF_1206' || LPAD(i, 2, '0') || ', 0) ' ||
                     'THEN NVL(' || CASE WHEN i = 1 THEN 'LAGERBESTAND' ELSE 'REST_LAGER_' || LPAD(i-1, 2, '0') END || ', 0) - NVL(BEDARF_1206' || LPAD(i, 2, '0') || ', 0) ' ||
