@@ -42,7 +42,6 @@ FROM allocs a
 JOIN parts p ON p.teilenr = a.teilenr   
 LEFT JOIN FinalPreis fp ON a.teilenr = fp.teilenr   
 WHERE a.prodauftr LIKE 'KA2018120603%'
-)   
 AND ((p.kzkauf = 'K' AND p.dispo_aktiv_jn != 'N') OR (a.kzkauf = 'E' AND a.kz_verlagert IN ('VO', 'VM', 'KB')))  
 AND p.dispo_gruppe NOT IN ('183', '185', '91')   
 GROUP BY     
