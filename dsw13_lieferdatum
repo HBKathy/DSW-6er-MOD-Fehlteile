@@ -5,7 +5,7 @@ DECLARE
 BEGIN
     FOR i IN v_start_ziffer..v_end_ziffer LOOP
         v_sql := '
-            MERGE INTO temp_table_ALLE_KT_DSW_MOD6 t
+            MERGE INTO temp_table_DSW_MOD6 t
             USING
             (
                 SELECT
