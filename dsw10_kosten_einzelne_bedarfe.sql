@@ -4,7 +4,7 @@ DECLARE
     sql_stmt VARCHAR2(4000); -- Dynamisches SQL-Statement
 BEGIN
     -- Dynamisches Update für jede Nummer
-    sql_stmt := 'UPDATE TEMP_TABLE_ALLE_KT_DSW_MOD6 SET ';
+    sql_stmt := 'UPDATE TEMP_TABLE_DSW_MOD6 SET ';
     
     FOR i IN 1..max_num LOOP
         -- Ergänze das dynamische SQL-Statement für jede Spalte
