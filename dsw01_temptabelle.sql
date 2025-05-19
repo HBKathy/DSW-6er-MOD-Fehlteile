@@ -1,6 +1,6 @@
--- Auf Basis Technischer Auftrag temp_table_alle_kt_dsw_mod6_techA
+-- Auf Basis Technischer Auftrag temp_table_dsw_mod6_techA
 
-CREATE GLOBAL TEMPORARY TABLE temp_table_alle_kt_dsw_mod6 ( 
+CREATE GLOBAL TEMPORARY TABLE temp_table_dsw_mod6 ( 
     TEILENR                 VARCHAR2(20),      
     BEZ                     VARCHAR2(50),      
     BEZ2                    VARCHAR2(2000), 
