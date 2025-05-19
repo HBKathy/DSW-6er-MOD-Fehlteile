@@ -1,16 +1,16 @@
     
-UPDATE temp_table_alle_kt_dsw_mod6
+UPDATE temp_table_dsw_mod6
 SET KOSTENFEHLTEILE =  
     NVL(GESAMTFEHLTEILE, 0) * NVL(EINZELPREIS_BRUTTO, 0) 
 
-UPDATE temp_table_alle_kt_dsw_mod6
+UPDATE temp_table_dsw_mod6
 SET WERT_PRO_FZG =  
     NVL(DSW_MENGE_1AUFTR, 0) * NVL(EINZELPREIS_BRUTTO, 0) 
 
-UPDATE temp_table_alle_kt_dsw_mod6
+UPDATE temp_table_dsw_mod6
 SET WERT_REST_LAGERBESTAND =  
     NVL(REST_LAGER_43, 0) * NVL(EINZELPREIS_BRUTTO, 0) 
 
-UPDATE temp_table_alle_kt_dsw_mod6
+UPDATE temp_table_dsw_mod6
 SET WERT_ANFANGS_LAGERBESTAND =  
     NVL(LAGERBESTAND, 0) * NVL(EINZELPREIS_BRUTTO, 0)
