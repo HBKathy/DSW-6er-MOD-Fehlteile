@@ -5,7 +5,7 @@ DECLARE
 BEGIN
     FOR i IN v_start_ziffer..v_end_ziffer LOOP
         v_sql := '
-            MERGE INTO temp_table_ALLE_KT_DSW_mod6 t
+            MERGE INTO temp_table_DSW_mod6 t
             USING
             (
                 SELECT
@@ -13,12 +13,7 @@ BEGIN
                     SUM(a.resmenge) AS summe_auftrmenge
                 FROM allocs a
                 JOIN parts p ON p.teilenr = a.teilenr
-                WHERE a.prodauftr IN (
-                    SELECT prodauftr
-                    FROM wrkord
-                    CONNECT BY PRIOR prodauftr = linkauf
-                    START WITH prodauftr = ''KA20181206'' || TO_CHAR(' || i || ', ''FM00'')
-                )
+               WHERE a.prodauftr LIKE ''KA20181206'' || TO_CHAR(' || i || ', ''FM00'') || ''%''
                 AND a.kzfertig != 4800
                 and a.kzfertig > 600
                 GROUP BY a.teilenr
