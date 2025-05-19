@@ -1,14 +1,14 @@
-SELECT temp_table_alle_kt_dsw_mod6.*
-FROM temp_table_alle_kt_dsw_mod6
-LEFT JOIN temp_table_alle_kt_dsw_mod6_techa
-ON temp_table_alle_kt_dsw_mod6.teilenr = temp_table_alle_kt_dsw_mod6_techa.teilenr
-WHERE temp_table_alle_kt_dsw_mod6_techa.teilenr IS NULL
+SELECT temp_table_dsw_mod6.*
+FROM temp_table_dsw_mod6
+LEFT JOIN temp_table_dsw_mod6_techa
+ON temp_table_dsw_mod6.teilenr = temp_table_dsw_mod6_techa.teilenr
+WHERE temp_table_dsw_mod6_techa.teilenr IS NULL
 
 UNION
 
 -- Zeilen aus Tabelle2, deren teilenr nicht in Tabelle1 vorkommt
-SELECT temp_table_alle_kt_dsw_mod6_techa.*
-FROM temp_table_alle_kt_dsw_mod6_techa
-LEFT JOIN temp_table_alle_kt_dsw_mod6
-ON temp_table_alle_kt_dsw_mod6_techa.teilenr = temp_table_alle_kt_dsw_mod6.teilenr
-WHERE temp_table_alle_kt_dsw_mod6.teilenr IS NULL;
+SELECT temp_table_dsw_mod6_techa.*
+FROM temp_table_dsw_mod6_techa
+LEFT JOIN temp_table_dsw_mod6
+ON temp_table_dsw_mod6_techa.teilenr = temp_table_dsw_mod6.teilenr
+WHERE temp_table_dsw_mod6.teilenr IS NULL;
